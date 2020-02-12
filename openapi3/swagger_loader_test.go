@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/mbilski/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 )
 

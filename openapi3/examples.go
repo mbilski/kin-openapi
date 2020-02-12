@@ -1,7 +1,7 @@
 package openapi3
 
 import (
-	"github.com/getkin/kin-openapi/jsoninfo"
+	"github.com/mbilski/kin-openapi/jsoninfo"
 )
 
 // Example is specified by OpenAPI/Swagger 3.0 standard.

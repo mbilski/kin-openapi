@@ -10,7 +10,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/mbilski/kin-openapi/openapi3"
 )
 
 // ErrInvalidRequired is an error that happens when a required value of a parameter or request's body is not defined.

@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/ghodss/yaml"
+	"github.com/mbilski/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 )
 
