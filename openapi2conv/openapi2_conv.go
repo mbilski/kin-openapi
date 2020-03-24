@@ -288,6 +288,9 @@ func ToV3SecurityScheme(securityScheme *openapi2.SecurityScheme) (*openapi3.Secu
 	}
 	result := &openapi3.SecurityScheme{
 		Description: securityScheme.Description,
+		ExtensionProps: openapi3.ExtensionProps{
+			Extensions: securityScheme.ExtensionProps.Extensions,
+		},
 	}
 	switch securityScheme.Type {
 	case "basic":
