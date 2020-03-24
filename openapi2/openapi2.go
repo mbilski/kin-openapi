@@ -10,6 +10,7 @@ package openapi2
 import (
 	"fmt"
 
+	"github.com/mbilski/kin-openapi/jsoninfo"
 	"github.com/mbilski/kin-openapi/openapi3"
 )
 
@@ -178,6 +179,8 @@ type Header struct {
 type SecurityRequirements []map[string][]string
 
 type SecurityScheme struct {
+	ExtensionProps
+
 	Ref              string            `json:"$ref,omitempty"`
 	Description      string            `json:"description,omitempty"`
 	Type             string            `json:"type,omitempty"`
@@ -188,4 +191,43 @@ type SecurityScheme struct {
 	TokenURL         string            `json:"tokenUrl,omitempty"`
 	Scopes           map[string]string `json:"scopes,omitempty"`
 	Tags             openapi3.Tags     `json:"tags,omitempty"`
+}
+
+func (ss *SecurityScheme) MarshalJSON() ([]byte, error) {
+	return jsoninfo.MarshalStrictStruct(ss)
+}
+
+func (ss *SecurityScheme) UnmarshalJSON(data []byte) error {
+	return jsoninfo.UnmarshalStrictStruct(data, ss)
+}
+
+type ExtensionProps struct {
+	Extensions map[string]interface{} `json:"-" yaml:"-"`
+}
+
+// Assert that the type implements the interface
+var _ jsoninfo.StrictStruct = &ExtensionProps{}
+
+// EncodeWith will be invoked by package "jsoninfo"
+func (props *ExtensionProps) EncodeWith(encoder *jsoninfo.ObjectEncoder, value interface{}) error {
+	for k, v := range props.Extensions {
+		if err := encoder.EncodeExtension(k, v); err != nil {
+			return err
+		}
+	}
+	return encoder.EncodeStructFieldsAndExtensions(value)
+}
+
+// DecodeWith will be invoked by package "jsoninfo"
+func (props *ExtensionProps) DecodeWith(decoder *jsoninfo.ObjectDecoder, value interface{}) error {
+	if err := decoder.DecodeStructFieldsAndExtensions(value); err != nil {
+		return err
+	}
+	source := decoder.DecodeExtensionMap()
+	result := make(map[string]interface{}, len(source))
+	for k, v := range source {
+		result[k] = v
+	}
+	props.Extensions = result
+	return nil
 }
